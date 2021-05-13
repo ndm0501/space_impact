@@ -8,6 +8,10 @@ const ctx = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+const scoreValue = document.querySelector('.score-value');
+const startGameBtn = document.querySelector('#start-game');
+const scoreCard = document.querySelector('#scoreCard')
+
 //creating spacecraft bluprint
 class SpaceCraft {
   constructor(x, y, radius, color) {
@@ -105,9 +109,8 @@ const spawnAliens = () => {
       const color = `hsl(${Math.random() * 360},50%,50%)`;
       const velocity = {
         x: 0, y: 1
-      }
-      aliens.push(new Alien(x, y, radius, color, velocity))
-      console.log(aliens)
+      };
+      aliens.push(new Alien(x, y, radius, color, velocity));
     } else {
       clearInterval(alienSpawnInterval);
     }
@@ -121,9 +124,10 @@ for each animation frame:
   3. fire the missiles
 */
 let animationFrame;
+let score = 0;
 const animate = () => {
   animationFrame = requestAnimationFrame(animate);
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+  ctx.fillStyle = 'rgba(3, 3, 3, 0.1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   spaceCraft.create()
   missiles.forEach((missile, missileIndex) => {
@@ -152,18 +156,30 @@ const animate = () => {
     }
 
     //check for distance between each alien and each missile
+    //update the score
     //remove the missile(s) and alien(s) colliding
     missiles.forEach((missile, missileIndex) => {
       const diffY = (missile.y - alien.y)
       const diffX = missile.x - alien.x
       const distAlienToMissile = Math.hypot(diffY, diffX);
       if (distAlienToMissile - missile.radius - alien.radius < 1) {
+
         if (alien.radius > 20) {
+
+          //increase score for hitting the alien
+          score += 100
+          scoreValue.innerHTML = score;
+
           alien.radius -= 10;
           setTimeout(() => {
             missiles.splice(missileIndex, 1);
           }, 0)
         } else {
+
+          //add bonus score for killing the alien
+          score += 250
+          scoreValue.innerHTML = score;
+
           setTimeout(() => {
             aliens.splice(alienIndex, 1);
             missiles.splice(missileIndex, 1);
@@ -206,5 +222,8 @@ addEventListener('keydown', event => {
 
 })
 
-animate()
-spawnAliens();
+startGameBtn.addEventListener('click', () => {
+  scoreCard.style.display = 'none';
+  animate();
+  spawnAliens();
+});
