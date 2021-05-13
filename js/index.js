@@ -22,7 +22,42 @@ class SpaceCraft {
     ctx.fillStyle = this.color;
     ctx.fill()
   }
+  moveHorizontal(val) {
+    this.create();
+    this.x = this.x + val
+  }
+  getXPosition() {
+    return this.x
+  }
+  setXPosition(position) {
+    this.x = position
+  }
+
 }
+
+//creating missile blueprint
+class Missile {
+  constructor(x, y, radius, color, velocity) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = velocity;
+  }
+  create() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill()
+  }
+  fire() {
+    this.create()
+    this.x = this.x + this.velocity.x;
+    this.y = this.y + this.velocity.y;
+  }
+
+}
+
 
 //positionaing the aircraft
 const x = canvas.width / 2;
@@ -30,6 +65,58 @@ const y = canvas.height * 0.9;
 
 //creating soacecraft
 const spaceCraft = new SpaceCraft(x, y, 20, 'blue');
-spaceCraft.create()
+
+//storing all the missiles 
+const missiles = [];
+
+//animating objects on the canvas
+
+/*
+for each animation frame:
+  1. clear the canvas
+  2. create the spacecraft
+  3. fire the missiles
+*/
+const animate = () => {
+  requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  spaceCraft.create()
+  missiles.forEach((missile) => {
+    missile.fire();
+  })
+}
+
+//firing the missiles continuously
+const fireMissileAtInterval = setInterval(() => {
+  missiles.push(new Missile(spaceCraft.getXPosition(), y - 10, 5, 'green', { x: 0, y: -2 }));
+}, 250)
+
+/*
+moving spacecraft horizontally :
+  1. Left Arrow Key --> Spacecraft moves 10 pixels left
+  2. Right Arrow Key --> Spacecraft moves 10 pixels right
+*/
+addEventListener('keydown', event => {
 
 
+  if (event.code === 'ArrowLeft') {
+    //moving the spacecraft left
+    spaceCraft.moveHorizontal(-10);
+
+    //if spacecarft hits leftmost side, respawn the spacecraft from right side
+    if (spaceCraft.getXPosition() < 1) {
+      spaceCraft.setXPosition(canvas.width + 10)
+    }
+  } else if (event.code === 'ArrowRight') {
+    //moving the spacecraft right
+    spaceCraft.moveHorizontal(10);
+
+    //if spacecarft hits rightmost side, respawn the spacecraft from left side
+    if (spaceCraft.getXPosition() > canvas.width) {
+      spaceCraft.setXPosition(-10)
+    }
+  }
+
+})
+
+animate()
