@@ -88,7 +88,7 @@ const spaceCraftX = canvas.width / 2;
 const milkyWayEntry = canvas.height * 0.9;
 
 //creating soacecraft
-const spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'blue');
+const spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'white');
 
 //storing all the missiles & aliens
 const missiles = [];
@@ -101,14 +101,14 @@ const spawnAliens = () => {
     if (!isGameOver) {
       const x = Math.random() * canvas.width;
       const y = 10;
-      const radius = Math.random() * (30 - 5) + 5;
-      const color = 'black';
+      const radius = Math.random() * (30 - 20) + 20;
+      const color = `hsl(${Math.random() * 360},50%,50%)`;
       const velocity = {
         x: 0, y: 1
       }
       aliens.push(new Alien(x, y, radius, color, velocity))
       console.log(aliens)
-    }else{
+    } else {
       clearInterval(alienSpawnInterval);
     }
   }, 1000)
@@ -123,7 +123,8 @@ for each animation frame:
 let animationFrame;
 const animate = () => {
   animationFrame = requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   spaceCraft.create()
   missiles.forEach((missile, missileIndex) => {
     missile.fire();
@@ -157,10 +158,17 @@ const animate = () => {
       const diffX = missile.x - alien.x
       const distAlienToMissile = Math.hypot(diffY, diffX);
       if (distAlienToMissile - missile.radius - alien.radius < 1) {
-        setTimeout(() => {
-          aliens.splice(alienIndex, 1);
-          missiles.splice(missileIndex, 1);
-        }, 0)
+        if (alien.radius > 20) {
+          alien.radius -= 10;
+          setTimeout(() => {
+            missiles.splice(missileIndex, 1);
+          }, 0)
+        } else {
+          setTimeout(() => {
+            aliens.splice(alienIndex, 1);
+            missiles.splice(missileIndex, 1);
+          }, 0)
+        }
       }
     })
   })
@@ -168,7 +176,7 @@ const animate = () => {
 
 //firing the missiles continuously
 const fireMissileAtInterval = setInterval(() => {
-  missiles.push(new Missile(spaceCraft.getXPosition(), milkyWayEntry - 10, 5, 'green', { x: 0, y: -2 }));
+  missiles.push(new Missile(spaceCraft.getXPosition(), milkyWayEntry - 10, 5, 'orangered', { x: 0, y: -5 }));
 }, 250)
 
 /*
@@ -180,7 +188,7 @@ addEventListener('keydown', event => {
 
   if (event.code === 'ArrowLeft' && !isGameOver) {
     //moving the spacecraft left
-    spaceCraft.moveHorizontal(-15);
+    spaceCraft.moveHorizontal(-20);
 
     //if spacecarft hits leftmost side, respawn the spacecraft from right side
     if (spaceCraft.getXPosition() < 1) {
@@ -188,7 +196,7 @@ addEventListener('keydown', event => {
     }
   } else if (event.code === 'ArrowRight' && !isGameOver) {
     //moving the spacecraft right
-    spaceCraft.moveHorizontal(15);
+    spaceCraft.moveHorizontal(20);
 
     //if spacecarft hits rightmost side, respawn the spacecraft from left side
     if (spaceCraft.getXPosition() > canvas.width) {
