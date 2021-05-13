@@ -80,29 +80,37 @@ class Alien {
   }
 }
 
+//Game Over Flag
+let isGameOver = false;
+
 //positionaing the aircraft
-const x = canvas.width / 2;
-const y = canvas.height * 0.9;
+const spaceCraftX = canvas.width / 2;
+const milkyWayEntry = canvas.height * 0.9;
 
 //creating soacecraft
-const spaceCraft = new SpaceCraft(x, y, 20, 'blue');
+const spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'blue');
 
-//storing all the missiles 
+//storing all the missiles & aliens
 const missiles = [];
-
 const aliens = [];
+
 //spawning aliens
 const spawnAliens = () => {
-  setInterval(() => {
-    const x = Math.random() * canvas.width;
-    const y = 10;
-    const radius = Math.random() * (30 - 5) + 5;
-    const color = 'black';
-    const velocity = {
-      x: 0, y: 1
+
+  const alienSpawnInterval = setInterval(() => {
+    if (!isGameOver) {
+      const x = Math.random() * canvas.width;
+      const y = 10;
+      const radius = Math.random() * (30 - 5) + 5;
+      const color = 'black';
+      const velocity = {
+        x: 0, y: 1
+      }
+      aliens.push(new Alien(x, y, radius, color, velocity))
+      console.log(aliens)
+    }else{
+      clearInterval(alienSpawnInterval);
     }
-    aliens.push(new Alien(x, y, radius, color, velocity))
-    console.log(aliens)
   }, 1000)
 }
 
@@ -112,21 +120,55 @@ for each animation frame:
   2. create the spacecraft
   3. fire the missiles
 */
+let animationFrame;
 const animate = () => {
-  requestAnimationFrame(animate);
+  animationFrame = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   spaceCraft.create()
-  missiles.forEach((missile) => {
+  missiles.forEach((missile, missileIndex) => {
     missile.fire();
+    if (missile.y - missile.radius < 0) {
+      setTimeout(() => {
+        missiles.splice(missileIndex, 1)
+      }, 0)
+    }
   })
-  aliens.forEach((alien) => {
+  aliens.forEach((alien, alienIndex) => {
     alien.move();
+
+    const diffY = spaceCraft.y - alien.y;
+    const diffX = spaceCraft.x - alien.x;
+    const distAlientToSpaceCraft = Math.hypot(diffY, diffX);
+
+    /*
+    It's Game Over if:
+      1. Alien collides with spacecraft
+      2. Alien crosses the milky way entrance
+    */
+    if ((distAlientToSpaceCraft - spaceCraft.radius - alien.radius < 1) || (alien.y >= milkyWayEntry)) {
+      cancelAnimationFrame(animationFrame);
+      isGameOver = true;
+    }
+
+    //check for distance between each alien and each missile
+    //remove the missile(s) and alien(s) colliding
+    missiles.forEach((missile, missileIndex) => {
+      const diffY = (missile.y - alien.y)
+      const diffX = missile.x - alien.x
+      const distAlienToMissile = Math.hypot(diffY, diffX);
+      if (distAlienToMissile - missile.radius - alien.radius < 1) {
+        setTimeout(() => {
+          aliens.splice(alienIndex, 1);
+          missiles.splice(missileIndex, 1);
+        }, 0)
+      }
+    })
   })
 }
 
 //firing the missiles continuously
 const fireMissileAtInterval = setInterval(() => {
-  missiles.push(new Missile(spaceCraft.getXPosition(), y - 10, 5, 'green', { x: 0, y: -2 }));
+  missiles.push(new Missile(spaceCraft.getXPosition(), milkyWayEntry - 10, 5, 'green', { x: 0, y: -2 }));
 }, 250)
 
 /*
@@ -136,7 +178,7 @@ moving spacecraft horizontally :
 */
 addEventListener('keydown', event => {
 
-  if (event.code === 'ArrowLeft') {
+  if (event.code === 'ArrowLeft' && !isGameOver) {
     //moving the spacecraft left
     spaceCraft.moveHorizontal(-15);
 
@@ -144,7 +186,7 @@ addEventListener('keydown', event => {
     if (spaceCraft.getXPosition() < 1) {
       spaceCraft.setXPosition(canvas.width + 15)
     }
-  } else if (event.code === 'ArrowRight') {
+  } else if (event.code === 'ArrowRight' && !isGameOver) {
     //moving the spacecraft right
     spaceCraft.moveHorizontal(15);
 
