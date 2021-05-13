@@ -9,8 +9,9 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const scoreValue = document.querySelector('.score-value');
-const startGameBtn = document.querySelector('#start-game');
-const scoreCard = document.querySelector('#scoreCard')
+const playGameBtn = document.querySelector('#play-game');
+const scoreCard = document.querySelector('#scoreCard');
+const scoreCardValue = document.querySelector('.your-score-value');
 
 //creating spacecraft bluprint
 class SpaceCraft {
@@ -92,11 +93,19 @@ const spaceCraftX = canvas.width / 2;
 const milkyWayEntry = canvas.height * 0.9;
 
 //creating soacecraft
-const spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'white');
+let spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'white');
 
 //storing all the missiles & aliens
-const missiles = [];
-const aliens = [];
+let missiles = [];
+let aliens = [];
+
+const init = () => {
+  spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'white');
+  missiles = [];
+  aliens = [];
+  isGameOver = false;
+  score = 0;
+}
 
 //spawning aliens
 const spawnAliens = () => {
@@ -153,6 +162,10 @@ const animate = () => {
     if ((distAlientToSpaceCraft - spaceCraft.radius - alien.radius < 1) || (alien.y >= milkyWayEntry)) {
       cancelAnimationFrame(animationFrame);
       isGameOver = true;
+      //show score card
+      scoreCard.style.display = 'flex';
+      scoreCardValue.innerHTML = score;
+      playGameBtn.innerHTML = 'Restart Game'
     }
 
     //check for distance between each alien and each missile
@@ -222,7 +235,8 @@ addEventListener('keydown', event => {
 
 })
 
-startGameBtn.addEventListener('click', () => {
+playGameBtn.addEventListener('click', () => {
+  init();
   scoreCard.style.display = 'none';
   animate();
   spawnAliens();
