@@ -210,11 +210,11 @@ addEventListener('touchmove', (event) => {
   event.stopPropagation();
   const clientX = event.touches[0] ? event.touches[0].clientX : event.clientX;
   if (previous && (previous > clientX)) {
-    spaceCraft.moveHorizontal(-2);
+    spaceCraft.moveHorizontal(-20);
 
   } else if (previous && (previous < clientX)) {
 
-    spaceCraft.moveHorizontal(2);
+    spaceCraft.moveHorizontal(20);
   }
   previous = clientX
   // const clientX = event.touches[0] ? event.touches[0].clientX : event.clientX;
