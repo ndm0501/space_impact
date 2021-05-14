@@ -35,7 +35,7 @@ body{
     flex-direction: column;
     align-items: center;
 }
-.btn{
+.btn-primary{
     padding: 16px;
     border-radius: 7px;
     height: 50px;
@@ -46,7 +46,7 @@ body{
     font-size: large;
     line-height: 16px;
 }
-.btn:hover{
+.btn-primary:hover{
     border: 1px solid #af3621;
     background: #d3361a;
 }
