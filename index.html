@@ -11,12 +11,41 @@
         <div class="score-container">
             <span class="score-label">Score: </span><span class="score-value">0</span>
         </div>
+        <div class="game-rules-container">
+            <div class="game-rules">
+                <h2>Game Rules: </h2>
+                <ul class="main-list">
+                    <li>Use Arrow Left/Right Key to move the Spacecraft Left or Right</li>
+                    <li>You need to stop the aliens from crossing the Milky Way(crossing the Spacecraft)</li>
+                    <li>Spacecraft shoots the missile continuously</li>
+                    <li>Each hit (missile to alien) fetches you 100 points</li>
+                    <li>Each kill(when alien disappears) feteches you 250 points</li>
+                    <li>
+                        It's a Game Over if:
+                        <ul class="sub-list">
+                            <li>
+                                the alien collides with the spacecraft.
+                            </li>
+                            <li>
+                                the alien enters the Milky Way Galaxy(crosses the Spacecraft);
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="back-btn-container">
+                    <button class="btn-secondary" id="game-rules-back-btn">Back</button>
+                </div>
+            </div>
+        </div>
         <div class="score-card-container" id="scoreCard">
             <div class="score-card">
                 <p class="your-score-label">Your Score</p>
                 <p class="your-score-value">0</p>
                 <div class="btn-container">
                     <button id="play-game" class="btn-primary">Start Game</button>
+                </div>
+                <div class="game-rules-btn-container">
+                    <button id="game-rules" class="btn-secondary">Game Rules</button>
                 </div>
             </div>
         </div>

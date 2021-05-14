@@ -16,6 +16,9 @@ const scoreValue = document.querySelector('.score-value');
 const playGameBtn = document.querySelector('#play-game');
 const scoreCard = document.querySelector('#scoreCard');
 const scoreCardValue = document.querySelector('.your-score-value');
+const gameRulesBtn = document.querySelector('#game-rules');
+const gameRulesBackBtn = document.querySelector('#game-rules-back-btn');
+const gameRulesContainer = document.querySelector('.game-rules-container');
 
 
 //Game Over Flag
@@ -170,6 +173,18 @@ addEventListener('keydown', event => {
     }
   }
 
+})
+
+gameRulesContainer.style.display = 'none';
+
+gameRulesBtn.addEventListener('click', () => {
+  scoreCard.style.display = 'none';
+  gameRulesContainer.style.display = 'flex';
+})
+
+gameRulesBackBtn.addEventListener('click', () => {
+  scoreCard.style.display = 'flex';
+  gameRulesContainer.style.display = 'none';
 })
 
 playGameBtn.addEventListener('click', () => {
