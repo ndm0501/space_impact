@@ -1,4 +1,7 @@
 import SpaceCraft from './SpaceCraft.js';
+import Missile from './Missile.js';
+import Alien from './Alien.js';
+
 const canvas = document.querySelector("canvas");
 
 //create canvas context
@@ -13,51 +16,6 @@ const scoreValue = document.querySelector('.score-value');
 const playGameBtn = document.querySelector('#play-game');
 const scoreCard = document.querySelector('#scoreCard');
 const scoreCardValue = document.querySelector('.your-score-value');
-
-//creating missile blueprint
-class Missile {
-  constructor(x, y, radius, color, velocity) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-  }
-  create() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-  }
-  fire() {
-    this.create()
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-  }
-
-}
-
-//creating Alien
-class Alien {
-  constructor(x, y, radius, color, velocity) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-  }
-  create() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-  }
-  move() {
-    this.create()
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-  }
-}
 
 
 //Game Over Flag
@@ -97,7 +55,7 @@ const spawnAliens = () => {
       const velocity = {
         x: 0, y: 1
       };
-      aliens.push(new Alien(x, y, radius, color, velocity));
+      aliens.push(new Alien(ctx, x, y, radius, color, velocity));
     } else {
       clearInterval(alienSpawnInterval);
     }
@@ -184,7 +142,7 @@ const animate = () => {
 
 //firing the missiles continuously
 const fireMissileAtInterval = setInterval(() => {
-  missiles.push(new Missile(spaceCraft.getXPosition(), milkyWayEntry - 10, 5, 'orangered', { x: 0, y: -5 }));
+  missiles.push(new Missile(ctx, spaceCraft.getXPosition(), milkyWayEntry - 10, 5, 'orangered', { x: 0, y: -5 }));
 }, 250);
 
 /*
