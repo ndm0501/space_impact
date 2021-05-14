@@ -1,4 +1,4 @@
-
+import SpaceCraft from './SpaceCraft.js';
 const canvas = document.querySelector("canvas");
 
 //create canvas context
@@ -13,33 +13,6 @@ const scoreValue = document.querySelector('.score-value');
 const playGameBtn = document.querySelector('#play-game');
 const scoreCard = document.querySelector('#scoreCard');
 const scoreCardValue = document.querySelector('.your-score-value');
-
-//creating spacecraft bluprint
-class SpaceCraft {
-  constructor(x, y, radius, color) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-  }
-  create() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-  }
-  moveHorizontal(val) {
-    this.create();
-    this.x += val;
-  }
-  getXPosition() {
-    return this.x;
-  }
-  setXPosition(position) {
-    this.x = position;
-  }
-
-}
 
 //creating missile blueprint
 class Missile {
@@ -95,7 +68,7 @@ const spaceCraftX = canvas.width / 2;
 const milkyWayEntry = canvas.height * 0.9;
 
 //creating soacecraft
-let spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'white');
+let spaceCraft = new SpaceCraft(ctx, spaceCraftX, milkyWayEntry, 20, 'white');
 
 //storing all the missiles & aliens
 let missiles = [];
@@ -103,7 +76,7 @@ let aliens = [];
 
 //(re)initializing
 const init = () => {
-  spaceCraft = new SpaceCraft(spaceCraftX, milkyWayEntry, 20, 'white');
+  spaceCraft = new SpaceCraft(ctx, spaceCraftX, milkyWayEntry, 20, 'white');
   missiles = [];
   aliens = [];
   isGameOver = false;
@@ -144,6 +117,7 @@ const animate = () => {
   ctx.fillStyle = 'rgba(3, 3, 3, 0.1)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   spaceCraft.create();
+
   missiles.forEach((missile, missileIndex) => {
     missile.fire();
     if (missile.y - missile.radius < 0) {
@@ -164,7 +138,7 @@ const animate = () => {
       1. Alien collides with spacecraft
       2. Alien crosses the milky way entrance
     */
-    if ((distAlientToSpaceCraft - spaceCraft.radius - alien.radius < 1) || (alien.y >= milkyWayEntry)) {
+    if ((distAlientToSpaceCraft - spaceCraft.radius - alien.radius < 1) || (alien.y - alien.radius >= milkyWayEntry)) {
       cancelAnimationFrame(animationFrame);
       isGameOver = true;
       //show score card
