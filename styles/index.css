@@ -6,6 +6,9 @@
 body{
     background: #111;
 }
+canvas{
+    display: block;
+}
 .score-container{
     position: fixed;
     color: whitesmoke;

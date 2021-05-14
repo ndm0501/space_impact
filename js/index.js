@@ -6,6 +6,8 @@ const canvas = document.querySelector("canvas");
 
 //create canvas context
 const ctx = canvas.getContext("2d");
+let canvasRect = canvas.getBoundingClientRect();
+console.log(canvasRect)
 
 //setting canvas width & height
 canvas.width = innerWidth;
@@ -195,3 +197,26 @@ playGameBtn.addEventListener('click', () => {
   animate();
   spawnAliens();
 });
+
+oncontextmenu = (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+}
+//adding touch support 
+let previous;
+addEventListener('touchmove', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  const clientX = event.touches[0] ? event.touches[0].clientX : event.clientX;
+  if (previous && (previous > clientX)) {
+    spaceCraft.moveHorizontal(-0.5);
+
+  } else if (previous && (previous < clientX)) {
+
+    spaceCraft.moveHorizontal(0.5);
+  }
+  previous = clientX
+  // const clientX = event.touches[0] ? event.touches[0].clientX : event.clientX;
+  // console.log("cvvvx", previous, clientX)
+})
