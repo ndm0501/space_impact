@@ -22,7 +22,6 @@ const gameRulesBtn = document.querySelector('#game-rules');
 const gameRulesBackBtn = document.querySelector('#game-rules-back-btn');
 const gameRulesContainer = document.querySelector('.game-rules-container');
 
-
 //Game Over Flag
 let isGameOver = false;
 
@@ -203,20 +202,13 @@ oncontextmenu = (event) => {
   event.stopPropagation();
   return false;
 }
+
 //adding touch support 
-let previous;
 addEventListener('touchmove', (event) => {
   event.preventDefault();
   event.stopPropagation();
   const clientX = event.touches[0] ? event.touches[0].clientX : event.clientX;
-  if (previous && (previous > clientX)) {
-    spaceCraft.moveHorizontal(-4);
 
-  } else if (previous && (previous < clientX)) {
+  spaceCraft.setXPosition(clientX);
 
-    spaceCraft.moveHorizontal(4);
-  }
-  previous = clientX
-  // const clientX = event.touches[0] ? event.touches[0].clientX : event.clientX;
-  // console.log("cvvvx", previous, clientX)
 })
