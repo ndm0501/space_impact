@@ -35,6 +35,12 @@ let spaceCraft = new SpaceCraft(ctx, spaceCraftX, milkyWayEntry, 20, 'white');
 let missiles = [];
 let aliens = [];
 
+let animationFrame;
+let score = 0;
+
+//hiding game rules initially
+gameRulesContainer.style.display = 'none';
+
 //(re)initializing
 const init = () => {
   spaceCraft = new SpaceCraft(ctx, spaceCraftX, milkyWayEntry, 20, 'white');
@@ -71,8 +77,6 @@ for each animation frame:
   2. create the spacecraft
   3. fire the missiles
 */
-let animationFrame;
-let score = 0;
 const animate = () => {
   animationFrame = requestAnimationFrame(animate);
   ctx.fillStyle = 'rgba(3, 3, 3, 0.1)';
@@ -174,8 +178,6 @@ addEventListener('keydown', event => {
   }
 
 })
-
-gameRulesContainer.style.display = 'none';
 
 gameRulesBtn.addEventListener('click', () => {
   scoreCard.style.display = 'none';
